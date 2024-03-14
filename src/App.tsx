@@ -6,7 +6,7 @@ function App() {
   const [currentPage, setCurrentPage] = useState(1);
   return (
     <div className="flex items-center flex-col w-full py-5">
-      <h1 className="font-sans mb-8 text-4xl">Jokes directory</h1>
+      <h1 className="font-sans mb-8 text-4xl font-bold">Jokes directory</h1>
       <JokesList />
       <Pagination
         className="mt-12"

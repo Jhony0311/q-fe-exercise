@@ -10,7 +10,7 @@ export default function JokeCard({
   punchline,
 }: JokeCardProps) {
   return (
-    <article className="max-w-md bg-white rounded-lg px-12 py-10 pb-6 shadow-md shadow-purple-300 ring-3 relative overflow-hidden">
+    <article className="max-w-md bg-white rounded-lg px-12 py-10 shadow-md shadow-purple-300 ring-3 relative overflow-hidden">
       <span aria-hidden className="absolute -bottom-3 -right-3 text-6xl z-0 opacity-20 select-none">🤣</span>
       <div className="relative">
         <span className="text-[11px] rounded-full py-1 px-3 bg-indigo-500 text-white font-bold font-sans uppercase">
