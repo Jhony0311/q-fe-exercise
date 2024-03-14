@@ -1,8 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap')
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 
 body {
   background-color: #f3e8ff;
@@ -11,3 +7,7 @@ body {
   background-size: 80px 80px;
   background-position: 0 0, 40px 40px;
 }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
