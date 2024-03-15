@@ -1,4 +1,4 @@
-import { HttpResponse, http } from "msw";
+import { HttpResponse, delay, http } from "msw";
 import dJokes from "../data/jokes.json";
 
 const jokes = new Map<
@@ -9,6 +9,13 @@ const jokes = new Map<
     punchline: string;
   }
 >();
+
+let lastId = 1;
+
+dJokes.forEach((joke) => {
+  jokes.set(lastId, joke);
+  lastId++;
+});
 
 const collection = {
   items: jokes,
@@ -49,11 +56,13 @@ const collection = {
 };
 
 export const handlers = [
-  http.get("/jokes", ({ request }) => {
+  http.get("/jokes", async ({ request }) => {
     const url = new URL(request.url);
 
     const reqPage = url.searchParams.get("page");
     const reqLimit = url.searchParams.get("limit");
+
+    await delay();
 
     if (typeof reqPage !== "string") {
       return HttpResponse.json({
@@ -70,6 +79,7 @@ export const handlers = [
       jokes: collection.getByPage(page, limit),
       page,
       perPage: limit,
+      total: collection.items.size,
     });
   }),
 ];
