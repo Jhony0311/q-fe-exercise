@@ -6,6 +6,7 @@ const client = axios.create();
 export type CollectionParams = {
   page: number;
   limit: number;
+  type?: string;
 };
 
 export type GetJokesResponse = {
@@ -15,17 +16,7 @@ export type GetJokesResponse = {
   total: number;
 };
 
-export async function getJokes({ page, limit }: CollectionParams) {
-  const res = await client.get<GetJokesResponse>("/jokes", {
-    params: {
-      page,
-      limit,
-    },
-  });
-  return res.data;
-}
-
-export async function getJokesByType({
+export async function getJokes({
   page,
   limit,
   type = "",

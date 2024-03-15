@@ -1,19 +1,20 @@
-import { HttpResponse, delay, http } from "msw";
+import {
+  DefaultBodyType,
+  HttpResponse,
+  PathParams,
+  StrictRequest,
+  delay,
+  http,
+} from "msw";
 import dJokes from "../data/jokes.json";
+import { Joke } from "types/jokes";
 
-const jokes = new Map<
-  number,
-  {
-    type: string;
-    setup: string;
-    punchline: string;
-  }
->();
+const jokes = new Map<number, Joke>();
 
 let lastId = 1;
 
 dJokes.forEach((joke) => {
-  jokes.set(lastId, joke);
+  jokes.set(lastId, {...joke, id: lastId});
   lastId++;
 });
 
@@ -22,64 +23,73 @@ const collection = {
   getAll: function () {
     return Array.from(this.items).map(([, joke]) => joke);
   },
-  getById: function (id: number) {
-    return this.items.get(id);
-  },
-  getByPage: function (page: number, limit: number) {
-    const totalJokes = this.items.size;
+  getByPage: function (page: number, limit: number, group?: Array<Joke>) {
+    const base = group ?? this.getAll();
+    const totalJokes = base.length;
     const totalPages = Math.ceil(totalJokes / limit);
 
     // Validate page number
     if (page < 1 || page > totalPages) {
-      return [];
+      return {
+        slice: [],
+        total: totalJokes,
+      };
     }
 
     const startIndex = (page - 1) * limit;
     const endIndex = Math.min(startIndex + limit, totalJokes);
-    return this.getAll().slice(startIndex, endIndex);
+    return {
+      slice: base.slice(startIndex, endIndex),
+      total: base.length,
+    };
   },
   getByType: function (page: number, limit: number, type: string) {
     const filteredJokes = this.getAll().filter((j) => j.type === type);
+    console.log({ filteredJokes });
 
-    const totalJokes = filteredJokes.length;
-    const totalPages = Math.ceil(totalJokes / limit);
-
-    // Validate page number
-    if (page < 1 || page > totalPages) {
-      return [];
-    }
-
-    const startIndex = (page - 1) * limit;
-    const endIndex = Math.min(startIndex + limit, totalJokes);
-    return filteredJokes.slice(startIndex, endIndex);
+    return this.getByPage(page, limit, filteredJokes);
   },
 };
 
-export const handlers = [
-  http.get("/jokes", async ({ request }) => {
-    const url = new URL(request.url);
+const collectionHandler = async ({
+  request,
+  params,
+}: {
+  request: StrictRequest<DefaultBodyType>;
+  params: PathParams;
+}) => {
+  const url = new URL(request.url);
 
-    const reqPage = url.searchParams.get("page");
-    const reqLimit = url.searchParams.get("limit");
+  const reqPage = url.searchParams.get("page");
+  const reqLimit = url.searchParams.get("limit");
+  const { typeId } = params;
 
-    await delay();
+  await delay();
 
-    if (typeof reqPage !== "string") {
-      return HttpResponse.json({
-        jokes: collection.getAll(),
-        page: 1,
-        perPage: collection.items.size,
-      });
-    }
+  const limit = typeof reqLimit === "string" ? parseInt(reqLimit) : 10;
+  const page = typeof reqPage === "string" ? parseInt(reqPage) : 1;
 
-    const page = parseInt(reqPage);
-    const limit = typeof reqLimit === "string" ? parseInt(reqLimit) : 10;
-
+  if (typeId && typeof typeId === "string") {
+    const result = collection.getByType(page, limit, typeId);
     return HttpResponse.json({
-      jokes: collection.getByPage(page, limit),
+      jokes: result.slice,
       page,
       perPage: limit,
-      total: collection.items.size,
+      total: result.total,
     });
-  }),
+  }
+
+  const result = collection.getByPage(page, limit);
+
+  return HttpResponse.json({
+    jokes: result.slice,
+    page,
+    perPage: limit,
+    total: result.total,
+  });
+};
+
+export const handlers = [
+  http.get("/jokes", collectionHandler),
+  http.get("/jokes/:typeId", collectionHandler),
 ];

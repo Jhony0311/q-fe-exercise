@@ -1,11 +1,16 @@
-import { Joke } from "types/joke";
+import Pill from "./Pill";
 
-export type JokeCardProps = Joke;
+import { Joke } from "types/jokes";
+
+export type JokeCardProps = Omit<Joke, "id"> & {
+  onSelectType: (type: string) => void;
+};
 
 export default function JokeCard({
   type,
   setup,
   punchline,
+  onSelectType,
 }: JokeCardProps) {
   return (
     <article className="max-w-md bg-white rounded-lg px-12 py-10 shadow-md shadow-purple-300 ring-3 relative overflow-hidden">
@@ -16,9 +21,9 @@ export default function JokeCard({
         🤣
       </span>
       <div className="relative">
-        <span className="text-[11px] rounded-full py-1 px-3 bg-indigo-500 text-white font-bold font-sans uppercase">
-          {type}
-        </span>
+        <button className="appearance-none" onClick={() => onSelectType(type)}>
+          <Pill>{type}</Pill>
+        </button>
         <div className="mt-8 font-serif">
           <p className="text-lg mb-4 font-medium">{setup}</p>
           <p className="text-md font-medium">{punchline}</p>
