@@ -8,6 +8,25 @@ body {
   background-position: 0 0, 40px 40px;
 }
 
+.loader {
+  border: 24px solid #6366f1;
+  border-bottom-color: #f3e8ff;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+} 
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
