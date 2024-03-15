@@ -1,6 +1,34 @@
 # React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is bootstrapped with Vite + Ts + React template. It also comes with some dependencies and MSW.
+
+
+## Instructions
+In order to run please make sure you are running Node >= 18. You can check by running:
+```bash
+> node -v
+v21.7.1
+```
+
+If Node version is in order please install dependencies by getting into the root folder of the project and running:
+```bash
+npm install
+```
+
+And after all dependencies are installed correctly you should be able to run the project locally by doing:
+```bash
+npm dev
+
+  VITE v5.1.6  ready in 989 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
+```
+
+If all is correct you should see an output similar to the one above.
+
+## Some othe stuff
 
 Currently, two official plugins are available:
 
