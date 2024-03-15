@@ -19,12 +19,12 @@ export default function Pagination({
   className,
 }: PaginationProps) {
   const totalPages = getTotalPages(total, limit);
-  console.log({ totalPages });
   const canGoPrev = currentPage !== 1;
   const canGoNext = currentPage < totalPages;
+
   return (
     <div
-      className={`flex ${className} font-sans gap-3 bg-white rounded-md items-center`}
+      className={`flex ${className} font-sans gap-3 bg-white rounded-md items-center mx-auto`}
     >
       <button
         className="inline-flex py-2 px-3 border-4 border-transparent rounded-l-md font-serif ease-in-out hover:border-t-purple-500 transition-colors disabled:bg-slate-100 disabled:border-t-transparent"
